@@ -170,6 +170,135 @@ h1 {
 .card-content h2 {
   margin-top: 0;
 }
+
+
+.coming-soon {
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 10%;
+  background-color: #edefee;
+  text-align: center;
+}
+
+.coming-soon-content {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.coming-soon-lemon {
+  font-size: 4rem;
+  margin-bottom: 12px;
+  animation: lemon-float 3s ease-in-out infinite;
+}
+
+.coming-soon-label {
+  color: #495e57;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 3px;
+  margin-bottom: 12px;
+}
+
+.coming-soon h1 {
+  color: #495e57;
+  font-family: "Markazi Text", serif;
+  font-size: clamp(3rem, 7vw, 5rem);
+  font-weight: 500;
+  line-height: 0.95;
+  margin: 0 0 24px;
+}
+
+.coming-soon h1 span {
+  color: #d6ad00;
+  display: block;
+}
+
+.coming-soon-description {
+  color: #333333;
+  max-width: 480px;
+  margin: 0 auto 30px;
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
+
+.coming-soon-actions {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 32px;
+}
+
+.coming-soon-button {
+  display: inline-block;
+  padding: 14px 28px;
+  border-radius: 8px;
+  background-color: #495e57;
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 700;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.coming-soon-button:hover {
+  background-color: #35473f;
+  transform: translateY(-2px);
+}
+
+.coming-soon-button:focus-visible {
+  outline: 3px solid #d6ad00;
+  outline-offset: 4px;
+}
+
+.coming-soon-footer {
+  color: #555555;
+  font-size: 0.9rem;
+}
+
+@keyframes lemon-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@media (max-width: 600px) {
+  .coming-soon {
+    min-height: 65vh;
+    padding: 50px 6%;
+  }
+
+  .coming-soon-lemon {
+    font-size: 3rem;
+  }
+
+  .coming-soon-label {
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+  }
+
+  .coming-soon-description {
+    font-size: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .coming-soon-lemon {
+    animation: none;
+  }
+
+  .coming-soon-button {
+    transition: none;
+  }
+}
+
 /* form */
 form {
   display: grid;

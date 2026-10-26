@@ -1,4 +1,6 @@
+import { Link } from 'react-router-dom';
 import restaurantFood from '../assets/restaurantfood.jpg';
+import ComingSoon from './ComingSoon';
 
 function callToAction() {
   return (
@@ -10,7 +12,10 @@ function callToAction() {
       We are a family-owned Mediterranean restaurant, focused
       on traditional recipes served with a modern twist.
     </p>
-    <button>Reserve a Table</button>
+   <Link to="/reservations">
+  <button>Reserve a Table</button>
+</Link>
+    
   </div>
 
   <img src={restaurantFood} alt="Little Lemon Restaurant" />

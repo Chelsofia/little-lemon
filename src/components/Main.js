@@ -5,6 +5,7 @@ import { Routes, Route, useNavigate } from "react-router-dom";
 import BookingForm from "./BookingForm";
 import HomePage from "./HomePage";
 import ConfirmedBooking from "./ConfirmedBooking";
+import ComingSoon from "./ComingSoon";
 
 export function initializeTimes() {
   const today = new Date();
@@ -28,7 +29,7 @@ function Main() {
     const success = submitAPI(formData);
 
     if (success) {
-      // Save the reservation locally if you still need localStorage.
+      // Save the reservation locally with localStorage.
       const savedReservations = JSON.parse(
         localStorage.getItem("reservations") || "[]"
       );
@@ -62,6 +63,7 @@ function Main() {
           path="/confirmed"
           element={<ConfirmedBooking />}
         />
+        <Route path="/coming-soon" element={<ComingSoon />} />
       </Routes>
     </main>
   );
