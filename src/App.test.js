@@ -136,3 +136,188 @@ test("returns an empty array when no reservations are saved", () => {
 
   expect(savedReservations).toEqual([]);
 });
+
+
+describe("BookingForm input validation", () => {
+  const availableTimes = ["17:00", "18:00", "19:00"];
+  let dispatch;
+  let submitForm;
+
+  beforeEach(() => {
+    dispatch = jest.fn();
+    submitForm = jest.fn();
+  });
+
+  const renderBookingForm = () => {
+    render(
+      <BookingForm
+        availableTimes={availableTimes}
+        dispatch={dispatch}
+        submitForm={submitForm}
+      />
+    );
+  };
+
+  test("submit button is disabled when the form is empty", () => {
+    renderBookingForm();
+
+    expect(
+      screen.getByRole("button", {
+        name: /make your reservation/i,
+      })
+    ).toBeDisabled();
+  });
+
+  test("date input has a minimum date of today", () => {
+    renderBookingForm();
+
+    const now = new Date();
+    const today = [
+      now.getFullYear(),
+      String(now.getMonth() + 1).padStart(2, "0"),
+      String(now.getDate()).padStart(2, "0"),
+    ].join("-");
+
+    expect(screen.getByLabelText(/choose date/i)).toHaveAttribute(
+      "min",
+      today
+    );
+  });
+
+  test("submit button remains disabled when the date is in the past", () => {
+    renderBookingForm();
+
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    const pastDate = [
+      yesterday.getFullYear(),
+      String(yesterday.getMonth() + 1).padStart(2, "0"),
+      String(yesterday.getDate()).padStart(2, "0"),
+    ].join("-");
+
+    fireEvent.change(screen.getByLabelText(/choose date/i), {
+      target: { value: pastDate },
+    });
+
+    fireEvent.change(screen.getByLabelText(/choose time/i), {
+      target: { value: "18:00" },
+    });
+
+    fireEvent.change(screen.getByLabelText(/occasion/i), {
+      target: { value: "Birthday" },
+    });
+
+    expect(
+      screen.getByRole("button", {
+        name: /make your reservation/i,
+      })
+    ).toBeDisabled();
+  });
+
+  test.each(["0", "11", "1.5", "-1"])(
+    "submit button is disabled when guests is %s",
+    (guestCount) => {
+      renderBookingForm();
+
+      const now = new Date();
+      const today = [
+        now.getFullYear(),
+        String(now.getMonth() + 1).padStart(2, "0"),
+        String(now.getDate()).padStart(2, "0"),
+      ].join("-");
+
+      fireEvent.change(screen.getByLabelText(/choose date/i), {
+        target: { value: today },
+      });
+
+      fireEvent.change(screen.getByLabelText(/choose time/i), {
+        target: { value: "18:00" },
+      });
+
+      fireEvent.change(screen.getByLabelText(/number of guests/i), {
+        target: { value: guestCount },
+      });
+
+      fireEvent.change(screen.getByLabelText(/occasion/i), {
+        target: { value: "Birthday" },
+      });
+
+      expect(
+        screen.getByRole("button", {
+          name: /make your reservation/i,
+        })
+      ).toBeDisabled();
+    }
+  );
+
+  test("submit button is disabled when occasion is missing", () => {
+    renderBookingForm();
+
+    const now = new Date();
+    const today = [
+      now.getFullYear(),
+      String(now.getMonth() + 1).padStart(2, "0"),
+      String(now.getDate()).padStart(2, "0"),
+    ].join("-");
+
+    fireEvent.change(screen.getByLabelText(/choose date/i), {
+      target: { value: today },
+    });
+
+    fireEvent.change(screen.getByLabelText(/choose time/i), {
+      target: { value: "18:00" },
+    });
+
+    expect(
+      screen.getByRole("button", {
+        name: /make your reservation/i,
+      })
+    ).toBeDisabled();
+  });
+
+  test("submit button is enabled when all inputs are valid", () => {
+    renderBookingForm();
+
+    const now = new Date();
+    const today = [
+      now.getFullYear(),
+      String(now.getMonth() + 1).padStart(2, "0"),
+      String(now.getDate()).padStart(2, "0"),
+    ].join("-");
+
+    fireEvent.change(screen.getByLabelText(/choose date/i), {
+      target: { value: today },
+    });
+
+    fireEvent.change(screen.getByLabelText(/choose time/i), {
+      target: { value: "18:00" },
+    });
+
+    fireEvent.change(screen.getByLabelText(/number of guests/i), {
+      target: { value: "2" },
+    });
+
+    fireEvent.change(screen.getByLabelText(/occasion/i), {
+      target: { value: "Birthday" },
+    });
+
+    expect(
+      screen.getByRole("button", {
+        name: /make your reservation/i,
+      })
+    ).toBeEnabled();
+  });
+
+  test("does not call submitForm when the form is invalid", () => {
+    renderBookingForm();
+
+    fireEvent.submit(
+      screen.getByRole("button", {
+        name: /make your reservation/i,
+      }).closest("form")
+    );
+
+    expect(submitForm).not.toHaveBeenCalled();
+  });
+});
